@@ -6,9 +6,27 @@ const SubmitButton = styled(Button, {
   width: "100%",
 });
 
-const Submit = () => {
+const Submit = ({ lat, lng, onComplete }) => {
+  console.log("we are in the submit button component");
+  console.log(lat);
+  console.log(lng);
   return (
-    <SubmitButton size={SIZE.large} onClick={() => alert("click")}>
+    <SubmitButton
+      size={SIZE.large}
+      onClick={async () => {
+        try {
+          const response = await fetch(`/api/forecast?lat=${lat}&lng=${lng}`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const data = await response.json();
+          onComplete(data);
+        } catch (err) {
+          console.log(err);
+        }
+      }}
+    >
       Submit
     </SubmitButton>
   );
